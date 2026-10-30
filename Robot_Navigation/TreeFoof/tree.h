@@ -7,8 +7,8 @@
 
 #define MAX_NEIGHBOURS 4
 #define MAX_STATE_LENGTH 10
-#define MAX_ROW 50 
-#define MAX_COL 100
+#define MAX_ROW 1000
+#define MAX_COL 2000
 
 typedef struct {
 
