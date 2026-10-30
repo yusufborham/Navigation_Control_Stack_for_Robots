@@ -13,4 +13,4 @@ obj="${2:-${file%.*}}"
 gcc -std=c11 -Wall -Wextra "$file" \
     TreeFoof/tree.c \
     TreePriorityQueue/treePriorityQueue.c \
-    -o "$obj" -lm
+    -o "$obj" -lm -O3 -march=native -flto
