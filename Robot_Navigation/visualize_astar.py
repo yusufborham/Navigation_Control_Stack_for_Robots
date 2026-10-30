@@ -49,9 +49,9 @@ import numpy as np
 
 # ---- Editable defaults; command-line arguments override these. ----
 BASE_DIR = Path(__file__).resolve().parent
-GRID_FILE = BASE_DIR / "occupancy_grid.csv"
+GRID_FILE = BASE_DIR / "occupancy_grid7.csv"
 PATH_FILE = BASE_DIR / "path_to_goal.txt"
-FPS = 15.0
+FPS = 50000.0
 PATH_ORDER = "row-col"        # The uploaded astar.c writes row first.
 COORDINATES = "image"         # "image" or "cartesian" (see above).
 START_PAUSED = False
