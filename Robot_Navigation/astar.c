@@ -274,7 +274,7 @@ int main(void)
     clock_t end_time = clock();
     double time_taken = (double)(end_time - start_time) / CLOCKS_PER_SEC;
     printf("The program took %f micro seconds to execute.\n", time_taken*1000000.0);
-    
+
     freeTree(root);
 
     free(grid);
