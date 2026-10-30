@@ -6,7 +6,7 @@
 
 /* No repeated struct definition here. */
 
-Node *createNode(char *state, char isRoot)
+Node *createNode(Pose thisPose , char isRoot)
 {
     Node *node = malloc(sizeof(Node));
 
@@ -14,77 +14,76 @@ Node *createNode(char *state, char isRoot)
         fprintf(stderr, "Memory allocation failed.\n");
         exit(EXIT_FAILURE);
     }
-    if (strlen(state) >= MAX_STATE_LENGTH) {
-    fprintf(stderr, "State is too long.\n");
+    if (thisPose.row > MAX_COL || thisPose.row > MAX_ROW) {
+    printf("The Cell is out of range \n");
     free(node);
     exit(EXIT_FAILURE);
 }
 
-    strcpy(node->state, state);
-
-
     node->isRoot = isRoot;
     node->parent = NULL;
-    node->childCount = 0;
+    node->neighbourCount = 0;
     node->cost = 0 ;
-    node->state[MAX_STATE_LENGTH-1] = '\0';
-    for (int i = 0; i < MAX_CHILDREN; i++) {
-        node->children[i] = NULL;
+    node->myPose.col = thisPose.col ;
+    node->myPose.row = thisPose.row ;
+    node->ID = thisPose.col + thisPose.row * MAX_COL ;
+    
+    for (int i = 0; i < MAX_NEIGHBOURS; i++) {
+        node->neighbours[i] = NULL;
     }
 
 
     return node;
 }
 
-/* Put addChild, getParent, printTree, and freeTree below. */
-/* Create a child and connect it to a valid parent. */
-Node *addChild(Node *parent, char *state)
+/* Put adXNeighbour, getParent, printXree, and freeTree below. */
+/* Create aXNeighbour and coXnect it toXa valid paXent. */
+Node *addNeighbour(Node *parent, Pose thisPose)
 {
-    if (parent->childCount == MAX_CHILDREN) {
-        fprintf(stderr, "This parent already has %d children.\n",
-                MAX_CHILDREN);
+    if (parent->neighbourCount == MAX_NEIGHBOURS) {
+        fprintf(stderr, "This parent already has %d neighbours.\n",
+                MAX_NEIGHBOURS);
         exit(EXIT_FAILURE);
     }
 
-    Node *child = createNode(state , 0);
+    Node *Neighbour = createNode(thisPose , 0);
 
-    child->parent = parent ; 
+    Neighbour->parent = parent ; 
 
-    parent->children[parent->childCount] = child;
-    parent->childCount++;
+    parent->neighbours[parent->neighbourCount] = Neighbour;
+    parent->neighbourCount++;
 
-    return child;
+    return Neighbour;
 }
 
-Node *getParent(Node *child){
-    if (child-> isRoot)
+Node *getParent(Node *Neighbour){
+    if (Neighbour-> isRoot)
         return NULL ;
-    return child->parent ;
+    return Neighbour->parent ;
 } 
 
-/* Print each node, then its children. */
+/* Print each node, then its neighbours. */
 void printTree(const Node *node, int depth)
 {
     if (node == NULL) return;
 
     for (int i = 0; i < depth; i++) printf("  ");
-    for (int i = 0; i < MAX_STATE_LENGTH; i++) {
-        if (node->state[i] == '\0') break;
-        printf("%c", node->state[i]);
-    }
+  
+    printf("%d,%d ", node->myPose.row , node->myPose.col);
+
     printf("\n");
 
-    for (int i = 0; i < node->childCount; i++) {
-        printTree(node->children[i], depth + 1);
+    for (int i = 0; i < node->neighbourCount; i++) {
+        printTree(node->neighbours[i], depth + 1);
     }
 }
 
-// delete N childs from the end
-void deleteNChild(Node *node , int N){
-    for ( int i = 0 ; i < N ; i++){
-        free(node->children[MAX_CHILDREN - i]) ;
+// delete N Neighbours from the end
+void deleteXNeighbour(Node *node , int X){
+    for ( int i = 0 ; i < X ; i++){
+        free(node->neighbours[MAX_NEIGHBOURS - i]) ;
     }
-    node->childCount = MAX_CHILDREN - N ;
+    node->neighbourCount = MAX_NEIGHBOURS - X ;
 
 }
 
@@ -93,8 +92,8 @@ void freeTree(Node *node)
 {
     if (node == NULL) return;
 
-    for (int i = 0; i < node->childCount; i++) {
-        freeTree(node->children[i]);
+    for (int i = 0; i < node->neighbourCount; i++) {
+        freeTree(node->neighbours[i]);
     }
 
     free(node);
